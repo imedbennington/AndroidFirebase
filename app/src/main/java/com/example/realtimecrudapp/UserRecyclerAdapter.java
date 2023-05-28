@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
@@ -54,7 +53,8 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ViewDialogConfirmDelete viewDialogConfirmDelete = new ViewDialogConfirmDelete();
+                viewDialogConfirmDelete.showDialog(context, users.getUserID());
             }
         });
     }
@@ -128,16 +128,38 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
                             Toast.makeText(context, "User Updated successfully!", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
-
-
                     }
                 }
             });
-
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
-
         }
     }
+public class ViewDialogConfirmDelete{
+        public void  showDialog (Context context, String id){
+            final Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.view_dialog_confirm_delete);
+            Button buttonDelete = dialog.findViewById(R.id.buttonDelete);
+            Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
+            buttonCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            buttonDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    databaseReference.child("USERS").child(id).removeValue();
+                    Toast.makeText(context, "User Deleted successfully!", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
 
+                }
+            });
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            dialog.show();
+        }
+}
 }
