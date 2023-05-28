@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     android:layoutDirection="ltr"
@@ -20,12 +21,15 @@
             android:layout_margin="3dp"
             android:background="@drawable/edittext_bg"
             android:gravity="center"
-            android:hint="User name"
+            android:hint="@string/user_name"
             android:padding="5dp"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:inputType="text"
+            android:autofillHints=""
+            tools:ignore="TextFields" />
 
         <EditText
             android:id="@+id/textEmail"
@@ -35,12 +39,15 @@
             android:layout_margin="3dp"
             android:background="@drawable/edittext_bg"
             android:gravity="center"
-            android:hint="User email"
+            android:hint="@string/user_email"
             android:padding="5dp"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:autofillHints=""
+            android:inputType="text"
+            tools:ignore="TextFields" />
 
         <EditText
             android:id="@+id/textCountry"
@@ -50,12 +57,14 @@
             android:layout_margin="3dp"
             android:background="@drawable/edittext_bg"
             android:gravity="center"
-            android:hint="User Country"
+            android:hint="@string/user_country"
             android:padding="5dp"
             android:textColor="@android:color/white"
             android:textColorHint="@android:color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:autofillHints=""
+            android:inputType="" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonAdd"
@@ -63,10 +72,11 @@
             android:layout_height="match_parent"
             android:layout_marginTop="15sp"
             android:background="@android:color/holo_blue_dark"
-            android:text="Add"
+            android:text="@string/add"
             android:textColor="@android:color/white"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="TextSizeCheck" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonCancel"
@@ -74,9 +84,10 @@
             android:layout_height="50sp"
             android:layout_marginTop="5dp"
             android:background="@android:color/holo_red_light"
-            android:text="Exit"
+            android:text="@string/exit"
             android:textColor="@android:color/white"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:ignore="TextSizeCheck" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>

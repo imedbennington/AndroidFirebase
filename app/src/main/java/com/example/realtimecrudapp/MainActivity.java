@@ -47,13 +47,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         usersItemArrayList = new ArrayList<>();
         buttonAdd = findViewById(R.id.buttonAdd);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ViewDialogAdd viewDialogAdd = new ViewDialogAdd();
-                viewDialogAdd.showDialog(MainActivity.this);
-            }
-        });
+        buttonAdd.setOnClickListener(this::onClick);
         readData();
     }
 
@@ -79,7 +73,13 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void onClick(View v) {
+        ViewDialogAdd viewDialogAdd = new ViewDialogAdd();
+        viewDialogAdd.showDialog(MainActivity.this);
+    }
+
     public class ViewDialogAdd{
+        @SuppressLint("SetTextI18n")
         public void showDialog (Context context){
             final Dialog dialog = new Dialog(context);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -95,26 +95,18 @@ public class MainActivity extends AppCompatActivity {
             Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
 
             buttonAdd.setText("ADD");
-            buttonCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+            buttonCancel.setOnClickListener(v -> dialog.dismiss());
+            buttonAdd.setOnClickListener(v -> {
+                String id = "user" + new Date().getTime();
+                String name = textName.getText().toString();
+                String email = textEmail.getText().toString();
+                String country = textCountry.getText().toString();
+                if (name.isEmpty() || email.isEmpty() || country.isEmpty()) {
+                    Toast.makeText(context, "Please Enter All data...", Toast.LENGTH_SHORT).show();
+                } else {
+                    databaseReference.child("USERS").child(id).setValue(new userItems(id, name, email, country));
+                    Toast.makeText(context, "DONE!", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
-                }
-            });
-            buttonAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String id = "user" + new Date().getTime();
-                    String name = textName.getText().toString();
-                    String email = textEmail.getText().toString();
-                    String country = textCountry.getText().toString();
-                    if (name.isEmpty() || email.isEmpty() || country.isEmpty()) {
-                        Toast.makeText(context, "Please Enter All data...", Toast.LENGTH_SHORT).show();
-                    } else {
-                        databaseReference.child("USERS").child(id).setValue(new userItems(id, name, email, country));
-                        Toast.makeText(context, "DONE!", Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
                 }
             });
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));

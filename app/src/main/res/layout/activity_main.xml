@@ -17,8 +17,9 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@android:color/holo_green_dark"
-        android:text="ADD NEW USER"
+        android:text="@string/add_new_user"
         android:textColor="@android:color/white"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        tools:ignore="VisualLintButtonSize" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

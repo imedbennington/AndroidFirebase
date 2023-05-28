@@ -1,5 +1,6 @@
 package com.example.realtimecrudapp;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -37,25 +38,20 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull UserRecyclerAdapter.ViewHolder holder, int position) {
         userItems users = usersItemArrayList.get(position);
         holder.textName.setText("Name : " + users.getUserName());
         holder.textEmail.setText("Email : " + users.getUserEmail());
         holder.textCountry.setText("Country : " + users.getUserCountry());
-        holder.buttonUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ViewDialogUpdate viewDialogUpdate = new ViewDialogUpdate();
-                viewDialogUpdate.showDialog(context, users.getUserID(), users.getUserName(), users.getUserEmail(), users.getUserCountry());
-            }
+        holder.buttonUpdate.setOnClickListener(v -> {
+            ViewDialogUpdate viewDialogUpdate = new ViewDialogUpdate();
+            viewDialogUpdate.showDialog(context, users.getUserID(), users.getUserName(), users.getUserEmail(), users.getUserCountry());
         });
-        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ViewDialogConfirmDelete viewDialogConfirmDelete = new ViewDialogConfirmDelete();
-                viewDialogConfirmDelete.showDialog(context, users.getUserID());
-            }
+        holder.buttonDelete.setOnClickListener(v -> {
+            ViewDialogConfirmDelete viewDialogConfirmDelete = new ViewDialogConfirmDelete();
+            viewDialogConfirmDelete.showDialog(context, users.getUserID());
         });
     }
 
@@ -64,7 +60,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         return usersItemArrayList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textName;
         TextView textEmail;
         TextView textCountry;
@@ -82,6 +78,7 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
         }
     }
     public class ViewDialogUpdate {
+        @SuppressLint("SetTextI18n")
         public void showDialog(Context context, String id, String name, String email, String country) {
             final Dialog dialog = new Dialog(context);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -102,32 +99,24 @@ public class UserRecyclerAdapter extends RecyclerView.Adapter<UserRecyclerAdapte
 
             buttonUpdate.setText("UPDATE");
 
-            buttonCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    dialog.dismiss();
-                }
-            });
+            buttonCancel.setOnClickListener(view -> dialog.dismiss());
 
-            buttonUpdate.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            buttonUpdate.setOnClickListener(view -> {
 
-                    String newName = textName.getText().toString();
-                    String newEmail = textEmail.getText().toString();
-                    String newCountry = textCountry.getText().toString();
+                String newName = textName.getText().toString();
+                String newEmail = textEmail.getText().toString();
+                String newCountry = textCountry.getText().toString();
 
-                    if (name.isEmpty() || email.isEmpty() || country.isEmpty()) {
-                        Toast.makeText(context, "Please Enter All data...", Toast.LENGTH_SHORT).show();
+                if (name.isEmpty() || email.isEmpty() || country.isEmpty()) {
+                    Toast.makeText(context, "Please Enter All data...", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    if (newName.equals(name) && newEmail.equals(email) && newCountry.equals(country)) {
+                        Toast.makeText(context, "you don't change anything", Toast.LENGTH_SHORT).show();
                     } else {
-
-                        if (newName.equals(name) && newEmail.equals(email) && newCountry.equals(country)) {
-                            Toast.makeText(context, "you don't change anything", Toast.LENGTH_SHORT).show();
-                        } else {
-                            databaseReference.child("USERS").child(id).setValue(new userItems(id, newName, newEmail, newCountry));
-                            Toast.makeText(context, "User Updated successfully!", Toast.LENGTH_SHORT).show();
-                            dialog.dismiss();
-                        }
+                        databaseReference.child("USERS").child(id).setValue(new userItems(id, newName, newEmail, newCountry));
+                        Toast.makeText(context, "User Updated successfully!", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 }
             });
@@ -143,20 +132,12 @@ public class ViewDialogConfirmDelete{
             dialog.setContentView(R.layout.view_dialog_confirm_delete);
             Button buttonDelete = dialog.findViewById(R.id.buttonDelete);
             Button buttonCancel = dialog.findViewById(R.id.buttonCancel);
-            buttonCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            buttonDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    databaseReference.child("USERS").child(id).removeValue();
-                    Toast.makeText(context, "User Deleted successfully!", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
+            buttonCancel.setOnClickListener(v -> dialog.dismiss());
+            buttonDelete.setOnClickListener((View v) -> {
+                databaseReference.child("USERS").child(id).removeValue();
+                Toast.makeText(context, "User Deleted successfully!", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
 
-                }
             });
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.show();
